@@ -1,23 +1,23 @@
-module github.com/krakendio/krakend-audit
+module github.com/davron112/krakend-audit
 
 go 1.19
 
 require (
-	github.com/krakendio/bloomfilter/v2 v2.0.4
-	github.com/krakendio/krakend-botdetector/v2 v2.1.0
-	github.com/krakendio/krakend-circuitbreaker/v2 v2.0.1
-	github.com/krakendio/krakend-cors/v2 v2.0.1
-	github.com/krakendio/krakend-gelf/v2 v2.0.1
-	github.com/krakendio/krakend-gologging/v2 v2.0.3
-	github.com/krakendio/krakend-httpsecure/v2 v2.0.1
-	github.com/krakendio/krakend-jose/v2 v2.3.0
-	github.com/krakendio/krakend-logstash/v2 v2.0.1
-	github.com/krakendio/krakend-metrics/v2 v2.0.1
-	github.com/krakendio/krakend-opencensus/v2 v2.1.0
-	github.com/krakendio/krakend-ratelimit/v3 v3.1.0
-	github.com/krakendio/krakend-rss/v2 v2.0.1
-	github.com/krakendio/krakend-xml/v2 v2.1.0
-	github.com/luraproject/lura/v2 v2.4.2
+	github.com/davron112/bloomfilter/v2 v2.0.4
+	github.com/davron112/krakend-botdetector/v2 v2.1.0
+	github.com/davron112/krakend-circuitbreaker/v2 v2.0.1
+	github.com/davron112/krakend-cors/v2 v2.0.1
+	github.com/davron112/krakend-gelf/v2 v2.0.1
+	github.com/davron112/krakend-gologging/v2 v2.0.3
+	github.com/davron112/krakend-httpsecure/v2 v2.0.1
+	github.com/davron112/krakend-jose/v2 v2.3.0
+	github.com/davron112/krakend-logstash/v2 v2.0.1
+	github.com/davron112/krakend-metrics/v2 v2.0.1
+	github.com/davron112/krakend-opencensus/v2 v2.1.0
+	github.com/davron112/krakend-ratelimit/v3 v3.1.0
+	github.com/davron112/krakend-rss/v2 v2.0.1
+	github.com/davron112/krakend-xml/v2 v2.1.0
+	github.com/davron112/lura/v2 v2.4.2
 	github.com/mitchellh/mapstructure v1.5.0
 )
 
@@ -90,7 +90,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/krakend/go-auth0 v1.0.0 // indirect
-	github.com/krakendio/flatmap v1.1.1 // indirect
+	github.com/davron112/flatmap v1.1.1 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

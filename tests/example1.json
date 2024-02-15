@@ -8,7 +8,7 @@
 		"github_com/devopsfaith/krakend/transport/http/server/handler": {
 			"name": ["basic-auth"]
 		},
-        "github_com/luraproject/lura/router/gin": {
+        "github_com/davron112/lura/router/gin": {
             "use_h2c": true
         },
 		"auth/api-keys": {}

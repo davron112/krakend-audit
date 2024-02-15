@@ -6,19 +6,19 @@ import (
 
 	"github.com/mitchellh/mapstructure"
 
-	bf "github.com/krakendio/bloomfilter/v2/krakend"
-	botdetector "github.com/krakendio/krakend-botdetector/v2/krakend"
-	opencensus "github.com/krakendio/krakend-opencensus/v2"
-	ratelimit "github.com/krakendio/krakend-ratelimit/v3/router"
-	rss "github.com/krakendio/krakend-rss/v2"
-	xml "github.com/krakendio/krakend-xml/v2"
-	"github.com/luraproject/lura/v2/config"
-	"github.com/luraproject/lura/v2/encoding"
-	"github.com/luraproject/lura/v2/proxy"
-	"github.com/luraproject/lura/v2/proxy/plugin"
-	router "github.com/luraproject/lura/v2/router/gin"
-	client "github.com/luraproject/lura/v2/transport/http/client/plugin"
-	server "github.com/luraproject/lura/v2/transport/http/server/plugin"
+	bf "github.com/davron112/bloomfilter/v2/krakend"
+	botdetector "github.com/davron112/krakend-botdetector/v2/krakend"
+	opencensus "github.com/davron112/krakend-opencensus/v2"
+	ratelimit "github.com/davron112/krakend-ratelimit/v3/router"
+	rss "github.com/davron112/krakend-rss/v2"
+	xml "github.com/davron112/krakend-xml/v2"
+	"github.com/davron112/lura/v2/config"
+	"github.com/davron112/lura/v2/encoding"
+	"github.com/davron112/lura/v2/proxy"
+	"github.com/davron112/lura/v2/proxy/plugin"
+	router "github.com/davron112/lura/v2/router/gin"
+	client "github.com/davron112/lura/v2/transport/http/client/plugin"
+	server "github.com/davron112/lura/v2/transport/http/server/plugin"
 )
 
 // Parse creates a Service capturing the details of the received configuration
