@@ -11,7 +11,7 @@ require (
 	github.com/davron112/krakend-gologging/v2 v2.0.3
 	github.com/davron112/krakend-httpsecure/v2 v2.0.1
 	github.com/davron112/krakend-jose/v2 v2.3.0
-	github.com/davron112/krakend-logstash/v2 v2.0.1
+	github.com/davron112/krakend-logstash/v2 v2.0.3
 	github.com/davron112/krakend-metrics/v2 v2.0.1
 	github.com/davron112/krakend-opencensus/v2 v2.1.0
 	github.com/davron112/krakend-ratelimit/v3 v3.1.0
