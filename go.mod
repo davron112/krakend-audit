@@ -3,7 +3,7 @@ module github.com/davron112/krakend-audit
 go 1.19
 
 require (
-	github.com/davron112/bloomfilter/v2 v2.0.4
+	github.com/davron112/bloomfilter/v2 v2.0.6
 	github.com/davron112/krakend-botdetector/v2 v2.1.0
 	github.com/davron112/krakend-circuitbreaker/v2 v2.0.1
 	github.com/davron112/krakend-cors/v2 v2.0.1
