@@ -17,7 +17,7 @@ require (
 	github.com/davron112/krakend-ratelimit/v3 v3.1.0
 	github.com/davron112/krakend-rss/v2 v2.0.1
 	github.com/davron112/krakend-xml/v2 v2.1.0
-	github.com/davron112/lura/v2 v2.4.2
+	github.com/davron112/lura/v2 v2.5.0
 	github.com/mitchellh/mapstructure v1.5.0
 )
 
