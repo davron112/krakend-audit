@@ -14,8 +14,8 @@ import (
 	jose "github.com/davron112/krakend-jose/v2"
 	logstash "github.com/davron112/krakend-logstash/v2"
 	opencensus "github.com/davron112/krakend-opencensus/v2"
-	ratelimitProxy "github.com/davron112/krakend-ratelimit/v3/proxy"
-	ratelimit "github.com/davron112/krakend-ratelimit/v3/router"
+	ratelimitProxy "github.com/davron112/krakend-ratelimit/v2/juju/proxy"
+	juju "github.com/davron112/krakend-ratelimit/v2/juju/router"
 	"github.com/davron112/lura/v2/proxy"
 	"github.com/davron112/lura/v2/proxy/plugin"
 	router "github.com/davron112/lura/v2/router/gin"
@@ -55,33 +55,26 @@ func Unmarshal(b []byte, s *Service) error {
 }
 
 var componentAlias = map[string]string{
-	server.Namespace:            "a",
-	client.Namespace:            "b",
-	plugin.Namespace:            "c",
-	proxy.Namespace:             "d",
-	router.Namespace:            "e",
-	bf.Namespace:                "f",
-	botdetector.Namespace:       "g",
-	opencensus.Namespace:        "h",
-	ratelimit.Namespace:         "i",
-	ratelimitProxy.Namespace:    "j",
-	"telemetry/newrelic":        "k",
-	"telemetry/ganalytics":      "l",
-	"telemetry/instana":         "m",
-	jose.ValidatorNamespace:     "n",
-	jose.SignerNamespace:        "o",
-	"auth/api-keys":             "p",
-	httpsecure.Namespace:        "q",
-	gologging.Namespace:         "r",
-	gelf.Namespace:              "s",
-	logstash.Namespace:          "t",
-	"backend/grpc":              "u",
-	"auth/basic":                "v",
-	"server/virtualhost":        "w",
-	"server/static-filesystem":  "x",
-	"backend/static-filesystem": "y",
-	"backend/http/client":       "z",
-	"telemetry/moesif":          "0",
+	server.Namespace:         "a",
+	client.Namespace:         "b",
+	plugin.Namespace:         "c",
+	proxy.Namespace:          "d",
+	router.Namespace:         "e",
+	bf.Namespace:             "f",
+	botdetector.Namespace:    "g",
+	opencensus.Namespace:     "h",
+	juju.Namespace:           "i",
+	ratelimitProxy.Namespace: "j",
+	"telemetry/newrelic":     "k",
+	"telemetry/ganalytics":   "l",
+	"telemetry/instana":      "m",
+	jose.ValidatorNamespace:  "n",
+	jose.SignerNamespace:     "o",
+	"auth/api-keys":          "p",
+	httpsecure.Namespace:     "q",
+	gologging.Namespace:      "r",
+	gelf.Namespace:           "s",
+	logstash.Namespace:       "t",
 }
 
 func applyAlias(s Service) Service {

@@ -13,8 +13,8 @@ import (
 	logstash "github.com/davron112/krakend-logstash/v2"
 	metrics "github.com/davron112/krakend-metrics/v2"
 	opencensus "github.com/davron112/krakend-opencensus/v2"
-	ratelimitProxy "github.com/davron112/krakend-ratelimit/v3/proxy"
-	ratelimit "github.com/davron112/krakend-ratelimit/v3/router"
+	ratelimitProxy "github.com/davron112/krakend-ratelimit/v2/juju/proxy"
+	ratelimit "github.com/davron112/krakend-ratelimit/v2/juju/router"
 	router "github.com/davron112/lura/v2/router/gin"
 	server "github.com/davron112/lura/v2/transport/http/server/plugin"
 )

@@ -11,35 +11,18 @@ import (
 	logstash "github.com/davron112/krakend-logstash/v2"
 	metrics "github.com/davron112/krakend-metrics/v2"
 	opencensus "github.com/davron112/krakend-opencensus/v2"
-	ratelimitProxy "github.com/davron112/krakend-ratelimit/v3/proxy"
-	ratelimit "github.com/davron112/krakend-ratelimit/v3/router"
-	"github.com/davron112/lura/v2/proxy"
+	ratelimitProxy "github.com/davron112/krakend-ratelimit/v2/juju/proxy"
+	ratelimit "github.com/davron112/krakend-ratelimit/v2/juju/router"
 	router "github.com/davron112/lura/v2/router/gin"
 	server "github.com/davron112/lura/v2/transport/http/server/plugin"
 )
 
-func hasBit(x, y int) bool {
-	return (x>>y)&1 == 1
+func hasBit(x float64, y int) bool {
+	return (int(x)>>y)&1 == 1
 }
 
 func hasBasicAuth(s *Service) bool {
-	// check basic auth in plugin
-	if len(s.Components[server.Namespace]) > 0 && hasBit(s.Components[server.Namespace][0], parseServerPlugin("basic-auth")) {
-		// old plugin basic auth
-		return true
-	}
-	if len(s.Components["auth/basic"]) > 0 && hasBit(s.Components["auth/basic"][0], 0) {
-		// main server config has auth/basic enabled
-		return true
-	}
-
-	for _, e := range s.Endpoints {
-		if len(e.Components["auth/basic"]) > 0 && hasBit(e.Components["auth/basic"][0], 0) {
-			return true
-		}
-	}
-
-	return false
+	return len(s.Components[server.Namespace]) > 0 && hasBit(float64(s.Components[server.Namespace][0]), parseServerPlugin("basic-auth"))
 }
 
 func hasApiKeys(s *Service) bool {
@@ -57,15 +40,15 @@ func hasNoJWT(s *Service) bool {
 }
 
 func hasInsecureConnections(s *Service) bool {
-	return hasBit(s.Details[0], ServiceAllowInsecureConnections)
+	return hasBit(float64(s.Details[0]), ServiceAllowInsecureConnections)
 }
 
 func hasNoTLS(s *Service) bool {
-	return !hasBit(s.Details[0], ServiceHasTLS)
+	return !hasBit(float64(s.Details[0]), ServiceHasTLS)
 }
 
 func hasTLSDisabled(s *Service) bool {
-	return hasBit(s.Details[0], ServiceHasTLS) && !hasBit(s.Details[0], ServiceTLSEnabled)
+	return hasBit(float64(s.Details[0]), ServiceHasTLS) && !hasBit(float64(s.Details[0]), ServiceTLSEnabled)
 }
 
 func hasNoHTTPSecure(s *Service) bool {
@@ -73,94 +56,12 @@ func hasNoHTTPSecure(s *Service) bool {
 	return !ok
 }
 
-func hasH2C(s *Service) bool {
-	if hasBit(s.Details[0], ServiceUseH2C) {
-		return true
-	}
-	// this is the deprecated way of assing h2c
-	v, ok := s.Components[router.Namespace]
-	if !ok || len(v) == 0 {
-		return false
-	}
-	return hasBit(v[0], RouterUseH2C)
-}
-
-func hasBackendInsecureConnections(s *Service) bool {
-	for _, e := range s.Endpoints {
-		for _, b := range e.Backends {
-			v, ok := b.Components["backend/http/client"]
-			if !ok || len(v) == 0 {
-				continue
-			}
-			if hasBit(v[0], BackendComponentHTTPClientAllowInsecureConnections) {
-				return true
-			}
-		}
-	}
-	return false
-}
-
-func hasEndpointWildcard(s *Service) bool {
-	for _, e := range s.Endpoints {
-		if hasBit(e.Details[4], BitEndpointWildcard) {
-			return true
-		}
-	}
-	return false
-}
-
-func hasEndpointCatchAll(s *Service) bool {
-	for _, e := range s.Endpoints {
-		if hasBit(e.Details[4], BitEndpointCatchAll) {
-			return true
-		}
-	}
-	return false
-}
-
-func hasMultipleUnsafeMethods(s *Service) bool {
-	for _, e := range s.Endpoints {
-		if e.Details[5] > 1 {
-			return true
-		}
-	}
-	return false
-}
-
-func hasSequentialProxy(s *Service) bool {
-	for _, e := range s.Endpoints {
-		p, ok := e.Components[proxy.Namespace]
-		if ok && len(p) > 0 && hasBit(p[0], 0) {
-			return true
-		}
-	}
-	return true
-}
-
-func hasQueryStringWildcard(s *Service) bool {
-	for _, e := range s.Endpoints {
-		if hasBit(e.Details[4], 1) {
-			return true
-		}
-	}
-	return false
-}
-
-func hasHeadersWildcard(s *Service) bool {
-	for _, e := range s.Endpoints {
-		if hasBit(e.Details[4], 2) {
-			return true
-		}
-	}
-	return false
-}
-
 func hasNoObfuscatedVersionHeader(s *Service) bool {
 	v, ok := s.Components[router.Namespace]
 	if !ok || len(v) == 0 {
 		return true
 	}
-	return !hasBit(v[0], RouterHideVersionHeader)
+	return !hasBit(float64(v[0]), RouterHideVersionHeader)
 }
 
 func hasNoCORS(s *Service) bool {
@@ -270,15 +171,11 @@ func hasNoLogging(s *Service) bool {
 }
 
 func hasRestfulDisabled(s *Service) bool {
-	return hasBit(s.Details[0], ServiceDisableStrictREST)
+	return hasBit(float64(s.Details[0]), ServiceDisableStrictREST)
 }
 
 func hasDebugEnabled(s *Service) bool {
-	return hasBit(s.Details[0], ServiceDebug)
-}
-
-func hasEchoEnabled(s *Service) bool {
-	return hasBit(s.Details[0], ServiceEcho)
+	return hasBit(float64(s.Details[0]), ServiceDebug)
 }
 
 func hasEndpointWithoutBackends(s *Service) bool {
@@ -301,7 +198,7 @@ func hasASingleBackendPerEndpoint(s *Service) bool {
 
 func hasAllEndpointsAsNoop(s *Service) bool {
 	for _, e := range s.Endpoints {
-		if !hasBit(e.Details[0], EncodingNOOP) {
+		if !hasBit(float64(e.Details[0]), EncodingNOOP) {
 			return false
 		}
 	}
@@ -309,5 +206,5 @@ func hasAllEndpointsAsNoop(s *Service) bool {
 }
 
 func hasSequentialStart(s *Service) bool {
-	return hasBit(s.Details[0], ServiceSequentialStart) && len(s.Agents) >= 10
+	return hasBit(float64(s.Details[0]), ServiceSequentialStart) && len(s.Agents) >= 10
 }

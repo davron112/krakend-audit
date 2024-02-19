@@ -17,7 +17,9 @@ func (s Service) Clone() Service {
 		Endpoints:  make([]Endpoint, len(s.Endpoints)),
 		Components: s.Components.Clone(),
 	}
-	copy(res.Details, s.Details)
+	for i, v := range s.Details {
+		res.Details[i] = v
+	}
 	for i, a := range s.Agents {
 		res.Agents[i] = a.Clone()
 	}
@@ -41,7 +43,9 @@ func (a Agent) Clone() Agent {
 		Backends:   make([]Backend, len(a.Backends)),
 		Components: a.Components.Clone(),
 	}
-	copy(res.Details, a.Details)
+	for i, v := range a.Details {
+		res.Details[i] = v
+	}
 	for i, b := range a.Backends {
 		res.Backends[i] = b.Clone()
 	}
@@ -62,7 +66,9 @@ func (e Endpoint) Clone() Endpoint {
 		Backends:   make([]Backend, len(e.Backends)),
 		Components: e.Components.Clone(),
 	}
-	copy(res.Details, e.Details)
+	for i, v := range e.Details {
+		res.Details[i] = v
+	}
 	for i, b := range e.Backends {
 		res.Backends[i] = b.Clone()
 	}
@@ -81,7 +87,9 @@ func (b Backend) Clone() Backend {
 		Details:    make([]int, len(b.Details)),
 		Components: b.Components.Clone(),
 	}
-	copy(res.Details, b.Details)
+	for i, v := range b.Details {
+		res.Details[i] = v
+	}
 	return res
 }
 
@@ -93,7 +101,9 @@ func (c Component) Clone() Component {
 	res := Component{}
 	for i, vs := range c {
 		res[i] = make([]int, len(vs))
-		copy(res[i], vs)
+		for j, v := range vs {
+			res[i][j] = v
+		}
 	}
 	return res
 }
@@ -109,8 +119,6 @@ const (
 	ServiceTLSEnableMTLS
 	ServiceTLSDisableSystemCaPool
 	ServiceTLSCaCerts
-	ServiceEcho
-	ServiceUseH2C
 )
 
 const (
@@ -130,8 +138,6 @@ const (
 	BackendGroup
 	BackendTarget
 	BackendIsCollection
-	BackendHeadersToPass
-	BackendQuery
 )
 
 const (
@@ -153,11 +159,4 @@ const (
 	RouterMaxMultipartMemory
 	RouterLoggerSkipPaths
 	RouterHideVersionHeader
-	RouterUseH2C
-)
-
-const (
-	BackendComponentHTTPClient = iota
-	BackendComponentHTTPClientAllowInsecureConnections
-	BackendComponentHTTPClientCerts
 )

@@ -1,15 +1,12 @@
 package audit
 
 import (
-	"strings"
 	"time"
-
-	"github.com/mitchellh/mapstructure"
 
 	bf "github.com/davron112/bloomfilter/v2/krakend"
 	botdetector "github.com/davron112/krakend-botdetector/v2/krakend"
 	opencensus "github.com/davron112/krakend-opencensus/v2"
-	ratelimit "github.com/davron112/krakend-ratelimit/v3/router"
+	juju "github.com/davron112/krakend-ratelimit/v2/juju/router"
 	rss "github.com/davron112/krakend-rss/v2"
 	xml "github.com/davron112/krakend-xml/v2"
 	"github.com/davron112/lura/v2/config"
@@ -37,9 +34,7 @@ func Parse(cfg *config.ServiceConfig) Service {
 		v1 = addBit(v1, ServiceDebug)
 	}
 
-	if cfg.AllowInsecureConnections || (cfg.ClientTLS != nil && cfg.ClientTLS.AllowInsecureConnections) {
-		// this global config is deprecates, see below the allow insecure
-		// connections inside the client_tls config:
+	if cfg.AllowInsecureConnections {
 		v1 = addBit(v1, ServiceAllowInsecureConnections)
 	}
 
@@ -63,14 +58,6 @@ func Parse(cfg *config.ServiceConfig) Service {
 		}
 	}
 
-	if cfg.Echo {
-		v1 = addBit(v1, ServiceEcho)
-	}
-
-	if cfg.UseH2C {
-		v1 = addBit(v1, ServiceUseH2C)
-	}
-
 	return Service{
 		Details:    []int{v1},
 		Agents:     parseAsyncAgents(cfg.AsyncAgents),
@@ -80,8 +67,7 @@ func Parse(cfg *config.ServiceConfig) Service {
 }
 
 func parseAsyncAgents(as []*config.AsyncAgent) []Agent {
-	var agents []Agent
-
+	agents := []Agent{}
 	for _, a := range as {
 		agent := Agent{
 			Details: []int{
@@ -99,60 +85,15 @@ func parseAsyncAgents(as []*config.AsyncAgent) []Agent {
 	return agents
 }
 
-const (
-	BitEndpointWildcard             int = 0
-	BitEndpointQueryStringWildcard      = 1
-	BitEndpointHeaderStringWildcard     = 2
-	BitEndpointCatchAll                 = 3
-)
-
 func parseEndpoints(es []*config.EndpointConfig) []Endpoint {
-	var endpoints []Endpoint
-
+	endpoints := []Endpoint{}
 	for _, e := range es {
-		wildcards := 0
-		if strings.HasSuffix(e.Endpoint, "*") {
-			wildcards = 1
-		}
-
-		if e.Endpoint == "/__catchall" {
-			wildcards = wildcards | (1 << BitEndpointCatchAll)
-		}
-
-		for _, s := range e.QueryString {
-			if s == "*" {
-				wildcards = wildcards | 2
-				break
-			}
-		}
-		for _, s := range e.HeadersToPass {
-			if s == "*" {
-				wildcards = wildcards | 4
-				break
-			}
-		}
-
-		numUnsafeMethods := 0
-		for _, b := range e.Backend {
-			if b.Method != "HEAD" && b.Method != "GET" {
-				numUnsafeMethods++
-			} else {
-				// TODO: check if this is correct:
-				// we consider a gRPC call an unsafe method
-				if _, ok := b.ExtraConfig["backend/grpc"]; ok {
-					numUnsafeMethods++
-				}
-			}
-		}
-
 		endpoint := Endpoint{
 			Details: []int{
 				parseEncoding(e.OutputEncoding),
 				len(e.QueryString),
 				len(e.HeadersToPass),
 				int(e.Timeout / time.Millisecond),
-				wildcards,
-				numUnsafeMethods,
 			},
 			Backends:   parseBackends(e.Backend),
 			Components: parseComponents(e.ExtraConfig),
@@ -183,8 +124,7 @@ func parseEncoding(enc string) int {
 }
 
 func parseBackends(bs []*config.Backend) []Backend {
-	var backends []Backend
-
+	backends := []Backend{}
 	for _, b := range bs {
 		v1 := parseEncoding(b.Encoding)
 		if len(b.AllowList) > 0 {
@@ -369,7 +309,7 @@ func parseComponents(cfg config.ExtraConfig) Component {
 
 			components[c] = []int{v1}
 
-		case ratelimit.Namespace:
+		case juju.Namespace:
 			cfg, ok := v.(map[string]interface{})
 			if !ok {
 				continue
@@ -392,38 +332,7 @@ func parseComponents(cfg config.ExtraConfig) Component {
 			}
 
 			components[c] = []int{v1}
-		case "backend/http/client":
-			cfg, ok := v.(map[string]interface{})
-			if !ok {
-				components[c] = []int{}
-				continue
-			}
-			v1 := 1
-			if clientTLS, ok := cfg["client_tls"].(map[string]interface{}); ok {
-				var cTLS config.ClientTLS
-				err := mapstructure.Decode(clientTLS, &cTLS)
-				if err == nil {
-					if cTLS.AllowInsecureConnections {
-						v1 = addBit(v1, BackendComponentHTTPClientAllowInsecureConnections)
-					}
-					if len(cTLS.ClientCerts) > 0 {
-						// check if we are using client certificates for mTLS against other
-						// services
-						v1 = addBit(v1, BackendComponentHTTPClientCerts)
-					}
-				}
-			}
-			components[c] = []int{v1}
-		case "telemetry/moesif":
-			cfg, ok := v.(map[string]interface{})
-			if !ok {
-				components[c] = []int{}
-				continue
-			}
-			eventQueueSize, _ := cfg["event_queue_size"].(int)
-			batchSize, _ := cfg["batch_size"].(int)
-			timerWakeupSecs, _ := cfg["timer_wake_up_seconds"].(int)
-			components[c] = []int{eventQueueSize, batchSize, timerWakeupSecs}
+
 		default:
 			components[c] = []int{}
 		}
@@ -519,11 +428,6 @@ func parseRouter(cfg config.ExtraConfig) int {
 	v, ok = cfg["hide_version_header"].(bool)
 	if ok && v {
 		res = addBit(res, RouterHideVersionHeader)
-	}
-
-	v, ok = cfg["use_h2c"].(bool)
-	if ok && v {
-		res = addBit(res, RouterUseH2C)
 	}
 
 	return res

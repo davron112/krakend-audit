@@ -57,12 +57,12 @@ func TestParse(t *testing.T) {
 		return
 	}
 
-	if result.Details[0] != 4028 {
-		t.Errorf("unexpected service details. have: %d, want: 4028", result.Details[0])
+	if result.Details[0] != 956 {
+		t.Errorf("unexpected service details. have: %d, want: 956", result.Details[0])
 	}
 
-	if len(result.Endpoints[0].Details) != 6 {
-		t.Errorf("unexpected number of endpoint details. have: %d, want: 5", len(result.Endpoints[0].Details))
+	if len(result.Endpoints[0].Details) != 4 {
+		t.Errorf("unexpected number of endpoint details. have: %d, want: 4", len(result.Endpoints[0].Details))
 		return
 	}
 

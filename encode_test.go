@@ -9,7 +9,7 @@ import (
 	bf "github.com/davron112/bloomfilter/v2/krakend"
 	botdetector "github.com/davron112/krakend-botdetector/v2/krakend"
 	opencensus "github.com/davron112/krakend-opencensus/v2"
-	ratelimit "github.com/davron112/krakend-ratelimit/v3/router"
+	juju "github.com/davron112/krakend-ratelimit/v2/juju/router"
 	"github.com/davron112/lura/v2/config"
 	"github.com/davron112/lura/v2/proxy"
 	"github.com/davron112/lura/v2/proxy/plugin"
@@ -48,7 +48,7 @@ func generateCfg() *config.ServiceConfig {
 			bf.Namespace:          map[string]interface{}{},
 			botdetector.Namespace: map[string]interface{}{},
 			opencensus.Namespace:  map[string]interface{}{},
-			ratelimit.Namespace:   map[string]interface{}{},
+			juju.Namespace:        map[string]interface{}{},
 		},
 		AsyncAgents: []*config.AsyncAgent{
 			{
@@ -57,8 +57,8 @@ func generateCfg() *config.ServiceConfig {
 				Consumer:   config.Consumer{},
 				Connection: config.Connection{},
 				ExtraConfig: config.ExtraConfig{
-					"component3":        true,
-					ratelimit.Namespace: map[string]interface{}{},
+					"component3":   true,
+					juju.Namespace: map[string]interface{}{},
 				},
 				Backend: []*config.Backend{
 					{
@@ -68,9 +68,9 @@ func generateCfg() *config.ServiceConfig {
 						Mapping:    map[string]string{"foo": "foobar"},
 						Encoding:   "json",
 						ExtraConfig: config.ExtraConfig{
-							"component4":        true,
-							"component5":        true,
-							ratelimit.Namespace: map[string]interface{}{},
+							"component4":   true,
+							"component5":   true,
+							juju.Namespace: map[string]interface{}{},
 						},
 					},
 				},
@@ -86,8 +86,7 @@ func generateCfg() *config.ServiceConfig {
 	}
 
 	for i := 0; i < 1000; i++ {
-		var endpoints []*config.EndpointConfig
-
+		endpoints := []*config.EndpointConfig{}
 		for k := 0; k < 1+rand.Intn(3); k++ {
 			e := &config.EndpointConfig{
 				Endpoint:       fmt.Sprintf("/foo/%3d", rand.Intn(100)),
