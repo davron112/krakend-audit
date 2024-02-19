@@ -14,7 +14,7 @@ require (
 	github.com/davron112/krakend-logstash/v2 v2.0.1
 	github.com/davron112/krakend-metrics/v2 v2.0.1
 	github.com/davron112/krakend-opencensus/v2 v2.0.2
-	github.com/davron112/krakend-ratelimit/v2 v2.0.4
+	github.com/davron112/krakend-ratelimit/v2 v2.0.5
 	github.com/davron112/krakend-rss/v2 v2.0.1
 	github.com/davron112/krakend-xml/v2 v2.0.2
 	github.com/davron112/lura/v2 v2.2.3

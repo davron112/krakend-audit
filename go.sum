@@ -237,8 +237,8 @@ github.com/davron112/krakend-metrics/v2 v2.0.1 h1:25935cKdsRSkTarHewipSbVgMTd/AD
 github.com/davron112/krakend-metrics/v2 v2.0.1/go.mod h1:YaN3S2ucWoNSw+Uh3Oyn5R9X5Vy95uWjQ6mHujzhWxE=
 github.com/davron112/krakend-opencensus/v2 v2.0.2 h1:dz/W3dpRGg+ywwNjZbnr+lc2XHC+UuY66ovpbt/MMVc=
 github.com/davron112/krakend-opencensus/v2 v2.0.2/go.mod h1:oDfMqEsvQ3Xn8MbFQDTHyV9eSL7GatzyPAPqexgn9/k=
-github.com/davron112/krakend-ratelimit/v2 v2.0.4 h1:ZXUKZQgCK7s7v7NgQtoDM3g0ADpjdLovbX0rndTkcv0=
-github.com/davron112/krakend-ratelimit/v2 v2.0.4/go.mod h1:zDzhSvx1Sf5KlSFvYicYX1RlGK/AG3J9Ns7n62vrS6k=
+github.com/davron112/krakend-ratelimit/v2 v2.0.5 h1:ZlkDWOqQi9H5WpeNZ0Pf85xxk9cMNtNlTQ0ZukNLf34=
+github.com/davron112/krakend-ratelimit/v2 v2.0.5/go.mod h1:P0ik6vtWq8kII4TgiKHtSGSqAEKtbnLStsqX+pBtadM=
 github.com/davron112/krakend-rss/v2 v2.0.1 h1:v+vwnHp9wjwT0bQnzQ0j3AC+sr0r44qLfoM7GBhZIuY=
 github.com/davron112/krakend-rss/v2 v2.0.1/go.mod h1:Wr2nHDpZF8eE92aQevXMXY4Fp+xw9vSoo5NBedWD7Ds=
 github.com/davron112/krakend-xml/v2 v2.0.2 h1:IYhwo60/vqat9sHarO1OqOsprcX0p19iONB2YRsONWM=
